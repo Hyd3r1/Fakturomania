@@ -1,0 +1,27 @@
+{
+    "name": "khaller/fakturomania-sdk",
+    "description": "SDK for Fakturomania API",
+    "version": "1.0.0",
+    "type": "sdk",
+    "require": {
+        "php": ">=7.3",
+        "guzzlehttp/guzzle": "^7.3",
+        "ext-json": "*",
+        "easyframework/collections": "^7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Krzysztof Haller",
+            "email": "contact@khaller.com",
+            "role": "Developer",
+            "homepage": "https://www.khaller.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "khaller\\fakturowniasdk\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

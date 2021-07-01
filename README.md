@@ -1,7 +1,7 @@
 
 Create invoice
 ```php
-    $sale = new \khaller\fakturowniasdk\Sale("AUTH TOKEN");
+    $sale = new \khaller\fakturomania\Sale("AUTH TOKEN");
     $sale->createInvoice([
             "documentName" => "FVS 1/12/2020",
             "documentNameIsCustom" => true,

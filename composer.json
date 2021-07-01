@@ -1,7 +1,7 @@
 {
     "name": "khaller/fakturomania-sdk",
     "description": "SDK for Fakturomania API",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "type": "sdk",
     "require": {
         "php": ">=7.3",

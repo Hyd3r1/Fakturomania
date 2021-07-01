@@ -1,5 +1,5 @@
 <?php
-namespace khaller\fakturowniasdk\models;
+namespace khaller\fakturomania\models;
 
 
 class ContractorModel

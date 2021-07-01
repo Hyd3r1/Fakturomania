@@ -1,11 +1,11 @@
 <?php
-namespace khaller\fakturowniasdk;
+namespace khaller\fakturomania;
 
 use Collections\Vector;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturowniasdk\models\SaleModel;
+use khaller\fakturomania\models\SaleModel;
 
 class Sale
 {

@@ -1,11 +1,11 @@
 <?php
-namespace khaller\fakturowniasdk;
+namespace khaller\fakturomania;
 
 
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturowniasdk\models\ContractorModel;
+use khaller\fakturomania\models\ContractorModel;
 
 class Contractor
 {

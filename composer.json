@@ -20,7 +20,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "khaller\\fakturowniasdk\\": "src/"
+            "khaller\\fakturomania\\": "src/"
         }
     },
     "minimum-stability": "stable"

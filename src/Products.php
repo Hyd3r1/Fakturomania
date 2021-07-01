@@ -70,18 +70,7 @@ class Products
                     "Auth-Token" => $this->authToken,
                     "Content-Type" => "application/json"
                 ],
-                "json" => [
-                    "name" => $productData["name"],
-                    "classificationCode" => $productData["classificationCode"],
-                    "unit" => $productData["unit"],
-                    "quantity" => $productData["quantity"],
-                    "netPrice" => $productData["netPrice"],
-                    "netValue" => $productData["netValue"],
-                    "vatRate" => $productData["vatRate"],
-                    "vatValue" => $productData["vatValue"],
-                    "grossValue" => $productData["grossValue"],
-                    "GTU" => $productData["GTU"]
-                ]
+                "json" => $productData
             ];
             $APIRequest = $this->HTTPClient->request("POST", "invoice-product/create", $APIOptions);
             $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);

@@ -76,14 +76,7 @@ class Contractor
                     "Content-Type" => "application/json",
                     "Auth-Token" => $this->authToken,
                 ],
-                "json" => [
-                    "name" => $contractorData["name"],
-                    "nipPrefix" => $contractorData["nipPrefix"],
-                    "nip" => $contractorData["nip"],
-                    "street" => $contractorData["street"],
-                    "postalCode" => $contractorData["postalCode"],
-                    "postalCity" => $contractorData["postalCity"]
-                ]
+                "json" => $contractorData
             ];
             $APIRequest = $this->HTTPClient->request("PUT", "contractors/". $contractorId, $APIOptions);
             return new ContractorModel(json_decode($APIRequest->getBody()->getContents(), true));
@@ -109,14 +102,7 @@ class Contractor
                     "Content-Type" => "application/json",
                     "Auth-Token" => $this->authToken,
                 ],
-                "json" => [
-                    "name" => $contractorData["name"],
-                    "nipPrefix" => $contractorData["nipPrefix"],
-                    "nip" => $contractorData["nip"],
-                    "street" => $contractorData["street"],
-                    "postalCode" => $contractorData["postalCode"],
-                    "postalCity" => $contractorData["postalCity"]
-                ]
+                "json" => $contractorData
             ];
             $APIRequest = $this->HTTPClient->request("POST", "contractors", $APIOptions);
             return new ContractorModel(json_decode($APIRequest->getBody()->getContents(), true));

@@ -5,7 +5,7 @@
     "type": "sdk",
     "require": {
         "php": ">=7.3",
-        "guzzlehttp/guzzle": "^7.3",
+        "guzzlehttp/guzzle": "*",
         "ext-json": "*",
         "easyframework/collections": "^7.0"
     },

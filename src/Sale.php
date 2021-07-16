@@ -49,7 +49,6 @@ class Sale
             ];
             $APIRequest = $this->HTTPClient->request("POST", "sale", $APIOptions);
             $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            print_r($APIResponse);
             return new SaleModel($APIResponse);
         } catch (GuzzleException $e) {
             throw new Exception($e->getMessage());

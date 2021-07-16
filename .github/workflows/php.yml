@@ -29,8 +29,19 @@ jobs:
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+  psalm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Psalm Security Scan
+        uses: docker://ghcr.io/psalm/psalm-security-scan
 
-    # - name: Run test suite
-    #   run: composer run-script test
+      - name: Upload Security Analysis results to GitHub
+        uses: github/codeql-action/upload-sarif@v1
+        with:
+          sarif_file: results.sarif
+
+      - name: Psalm – Static Analysis for PHP
+        uses: docker://vimeo/psalm-github-actions
+
+      - name: PHP Lint
+        uses: michaelw90/PHP-Lint@master

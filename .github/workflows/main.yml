@@ -15,15 +15,12 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: PHP Code Style (phpcs)
         # uses: chindit/actions-phpcs@ccda708ed581ebe13a66497cc47c07b8346af3b3
         uses: chindit/actions-phpcs@1.0.1
         with:
-          dir: src/
+          dir: ./src

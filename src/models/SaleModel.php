@@ -112,7 +112,7 @@ class SaleModel
 
         $this->setPaymentInfo([
             "paymentDeadline" => $APIResponse["paymentInfo"]["paymentDeadline"],
-            "paymentDate" => $APIResponse["paymentInfo"]["paymentDate"],
+            "paymentDate" => $APIResponse["paymentInfo"]["paymentDate"] ?? null,
             "paymentMethod" => $APIResponse["paymentInfo"]["paymentMethod"],
             "amountTotal" => $APIResponse["paymentInfo"]["amountTotal"],
             "amountPaid" => $APIResponse["paymentInfo"]["amountPaid"],

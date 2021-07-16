@@ -105,14 +105,14 @@ class ProductModel
         $this->setCreated($APIResponse["created"]);
         $this->setOrganizationId($APIResponse["organizationId"]);
         $this->setUnit($APIResponse["unit"]);
-        $this->setClassificationCode($APIResponse["classificationCode"]);
+        $this->setClassificationCode($APIResponse["classificationCode"] ?? null);
         $this->setQuantity($APIResponse["quantity"]);
         $this->setNetPrice($APIResponse["netPrice"]);
         $this->setNetValue($APIResponse["netValue"]);
         $this->setVatRate($APIResponse["vatRate"]);
         $this->setVatValue($APIResponse["vatValue"]);
         $this->setGrossValue($APIResponse["grossValue"]);
-        $this->setGTU($APIResponse["GTU"]);
+        $this->setGTU($APIResponse["GTU"] ?? null);
         $this->setIsCurrent($APIResponse["isCurrent"]);
         $this->setDeleted($APIResponse["deleted"]);
     }

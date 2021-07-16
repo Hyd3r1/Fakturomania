@@ -7,7 +7,8 @@
         "php": ">=7.4",
         "guzzlehttp/guzzle": "*",
         "ext-json": "*",
-        "jenssegers/model": "^1.4"
+        "jenssegers/model": "^1.4",
+        "easyframework/collections": "^7.0"
     },
     "license": "MIT",
     "authors": [

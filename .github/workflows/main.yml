@@ -23,4 +23,4 @@ jobs:
         # uses: chindit/actions-phpcs@ccda708ed581ebe13a66497cc47c07b8346af3b3
         uses: chindit/actions-phpcs@1.0.1
         with:
-          dir: .
+          dir: src

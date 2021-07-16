@@ -5,6 +5,7 @@ namespace khaller\fakturomania;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use khaller\fakturomania\exceptions\ContractorException;
 use khaller\fakturomania\models\ContractorModel;
 
 class Contractor
@@ -35,10 +36,10 @@ class Contractor
 
     /**
      * @param integer $contractorId
-     * @return ContractorModel
+     * @return models\Contractor
      * @throws Exception
      */
-    public function getContractor(int $contractorId): ContractorModel
+    public function getContractor(int $contractorId): models\Contractor
     {
         if(!isset($contractorId))
             throw new Exception("[ FakturomaniaSDK ] contractorId is required");
@@ -52,22 +53,32 @@ class Contractor
                 ]
             ];
             $APIRequest = $this->HTTPClient->request("GET", "contractors/". $contractorId, $APIOptions);
-            return new ContractorModel(json_decode($APIRequest->getBody()->getContents(), true));
+            $apiResponse = json_decode($APIRequest->getBody()->getContents());
+            return new models\Contractor([
+                'contractorId' => $apiResponse->contractorId,
+                'contractorVersionId' => $apiResponse->contractorVersionId,
+                'name' => $apiResponse->name,
+                'nipPrefix' => $apiResponse->nipPrefix,
+                'nip' => $apiResponse->nip,
+                'street' => $apiResponse->street,
+                'postalCode' => $apiResponse->postalCode,
+                'postalCity' => $apiResponse->postalCity,
+                'customerAccountId' => $apiResponse->customerAccountId,
+                'supplierAccountId' => $apiResponse->supplierAccountId
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ContractorException($e->getMessage());
         }
     }
 
     /**
-     * @param integer $contractorId
-     * @param array $contractorData
-     * @return ContractorModel
+     * @return models\Contractor
      * @throws Exception
      */
-    public function updateContractor(int $contractorId, array $contractorData): ContractorModel
+    public function updateContractor($contractorId, models\Contractor $contractor): models\Contractor
     {
-        if(!isset($contractorId) || !isset($contractorData))
-            throw new Exception("[ FakturowaniaSDK ] contractorId and contractorData is required");
+        if(!$contractor || isset($contractorId))
+            throw new ContractorException("[ FakturowaniaSDK ] contractorId and contractor is required");
 
         try {
             $APIOptions = [
@@ -76,24 +87,36 @@ class Contractor
                     "Content-Type" => "application/json",
                     "Auth-Token" => $this->authToken,
                 ],
-                "json" => $contractorData
+                "json" => $contractor->getForRequest()
             ];
             $APIRequest = $this->HTTPClient->request("PUT", "contractors/". $contractorId, $APIOptions);
-            return new ContractorModel(json_decode($APIRequest->getBody()->getContents(), true));
+            $apiResponse = json_decode($APIRequest->getBody()->getContents());
+            return new models\Contractor([
+                'contractorId' => $apiResponse->contractorId,
+                'contractorVersionId' => $apiResponse->contractorVersionId,
+                'name' => $apiResponse->name,
+                'nipPrefix' => $apiResponse->nipPrefix,
+                'nip' => $apiResponse->nip,
+                'street' => $apiResponse->street,
+                'postalCode' => $apiResponse->postalCode,
+                'postalCity' => $apiResponse->postalCity,
+                'customerAccountId' => $apiResponse->customerAccountId,
+                'supplierAccountId' => $apiResponse->supplierAccountId
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ContractorException($e->getMessage());
         }
     }
 
     /**
-     * @param array $contractorData
-     * @return ContractorModel
-     * @throws Exception
+     * @param models\Contractor $contractor
+     * @return models\Contractor
+     * @throws ContractorException
      */
-    public function createContractor(array $contractorData): ContractorModel
+    public function createContractor(models\Contractor $contractor): models\Contractor
     {
-        if(!isset($contractorData))
-            throw new Exception("[ FakturowaniaSDK ] contractorData is required");
+        if(count($contractor->toArray()) === 0)
+            throw new ContractorException("[ FakturowaniaSDK ] contractor is required");
 
         try {
             $APIOptions = [
@@ -102,12 +125,24 @@ class Contractor
                     "Content-Type" => "application/json",
                     "Auth-Token" => $this->authToken,
                 ],
-                "json" => $contractorData
+                "json" => $contractor->getForRequest()
             ];
             $APIRequest = $this->HTTPClient->request("POST", "contractors", $APIOptions);
-            return new ContractorModel(json_decode($APIRequest->getBody()->getContents(), true));
+            $apiResponse = json_decode($APIRequest->getBody()->getContents());
+            return new models\Contractor([
+                'contractorId' => $apiResponse->contractorId,
+                'contractorVersionId' => $apiResponse->contractorVersionId,
+                'name' => $apiResponse->name,
+                'nipPrefix' => $apiResponse->nipPrefix,
+                'nip' => $apiResponse->nip,
+                'street' => $apiResponse->street,
+                'postalCode' => $apiResponse->postalCode,
+                'postalCity' => $apiResponse->postalCity,
+                'customerAccountId' => $apiResponse->customerAccountId,
+                'supplierAccountId' => $apiResponse->supplierAccountId
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ContractorException($e->getMessage());
         }
     }
 }

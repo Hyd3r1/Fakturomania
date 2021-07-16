@@ -4,7 +4,9 @@ namespace khaller\fakturomania;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturomania\models\AuthenticationModel;
+use khaller\fakturomania\dtos\AuthenticationDTO;
+use khaller\fakturomania\exceptions\AuthenticationException;
+use khaller\fakturomania\models\Auth;
 
 class Authentication
 {
@@ -22,23 +24,16 @@ class Authentication
     }
 
     /**
-     * @param string $email Email to login
-     * @param string $password Password for auth user
-     * @param boolean $remember Long time of expire
-     * @return AuthenticationModel Data model
      * @throws Exception Guzzle HTTP error
      */
-    public function generateSession(string $email, string $password, bool $remember): AuthenticationModel
+    public function generateSession(Auth $auth)
     {
-        if(!isset($email) || !isset($password) || !isset($remember))
-            throw new Exception("[ FakturomaniaSDK ] email, password, and remember is required!");
-
         try {
             $APIOptions = [
                 "json" => [
-                    "email" => $email,
-                    "password" => $password,
-                    "remember" => $remember
+                    "email" => $auth->userEmail,
+                    "password" => $auth->password,
+                    "remember" => $auth->remember
                 ],
                 "headers" => [
                     "Accept" => "application/json",
@@ -47,10 +42,15 @@ class Authentication
             ];
 
             $APIRequest = $this->HTTPClient->request("POST", "session", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            return new AuthenticationModel($APIResponse["value"], $APIResponse["userEmail"], $APIResponse["userLoginEmail"], $APIResponse["valid"]);
+            $APIResponse = json_decode($APIRequest->getBody()->getContents());
+            return new Auth([
+                'value' => $APIResponse->value,
+                'userEmail' => $APIResponse->userEmail,
+                'userLoginEmail' => $APIResponse->userLoginEmail,
+                'valid' => $APIResponse->valid
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new AuthenticationException($e->getMessage());
         }
     }
 }

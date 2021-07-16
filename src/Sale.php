@@ -5,6 +5,8 @@ use Collections\Vector;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use khaller\fakturomania\exceptions\InvoiceException;
+use khaller\fakturomania\models\Invoice;
 use khaller\fakturomania\models\SaleModel;
 
 class Sale
@@ -29,14 +31,14 @@ class Sale
     }
 
     /**
-     * @param $invoiceData
-     * @return SaleModel
-     * @throws Exception
+     * @param Invoice $invoice
+     * @return Invoice
+     * @throws InvoiceException
      */
-    public function createInvoice($invoiceData): SaleModel
+    public function createInvoice(Invoice $invoice): Invoice
     {
-        if(!isset($invoiceData))
-            throw new Exception("[ Fakturomania SDK ] InvoiceData is required");
+        if(count($invoice->toArray()) == 0)
+            throw new InvoiceException("[ Fakturomania SDK ] InvoiceData is required");
 
         try {
             $APIOptions = [
@@ -45,13 +47,20 @@ class Sale
                     "Auth-Token" => $this->authToken,
                     "Content-Type" => "application/json"
                 ],
-                "json" => $invoiceData
+                "json" => $invoice->getForRequest()
             ];
             $APIRequest = $this->HTTPClient->request("POST", "sale", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            return new SaleModel($APIResponse);
+            $APIResponse = json_decode($APIRequest->getBody()->getContents());
+            return new Invoice([
+                'invoiceDetails' => $APIResponse->invoiceDetails,
+                'invoiceInfo' => $APIResponse->invoiceInfo,
+                'contractorInfo' => $APIResponse->contractorInfo,
+                'recordsInfo' => $APIResponse->recordsInfo,
+                'paymentInfo' => $APIResponse->paymentInfo,
+                'taxInfo' => $APIResponse->taxInfo,
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new InvoiceException($e->getMessage());
         }
     }
 

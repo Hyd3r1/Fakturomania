@@ -1,13 +1,13 @@
 {
     "name": "khaller/fakturomania-sdk",
     "description": "SDK for Fakturomania API",
-    "version": "0.1.4",
+    "version": "0.2.0",
     "type": "sdk",
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "guzzlehttp/guzzle": "*",
         "ext-json": "*",
-        "easyframework/collections": "^7.0"
+        "jenssegers/model": "^1.4"
     },
     "license": "MIT",
     "authors": [

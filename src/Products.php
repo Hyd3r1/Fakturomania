@@ -5,6 +5,9 @@ use Collections\Vector;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use Jenssegers\Model\Model;
+use khaller\fakturomania\exceptions\ProductException;
+use khaller\fakturomania\models\Product;
 use khaller\fakturomania\models\ProductModel;
 
 class Products
@@ -30,13 +33,13 @@ class Products
 
     /**
      * @param integer $productId
-     * @return ProductModel
+     * @return Product
      * @throws Exception
      */
-    public function getProduct(int $productId): ProductModel
+    public function getProduct(int $productId): Product
     {
         if(!isset($productId))
-            throw new Exception("[ FakturomaniaSDK ] productId is required");
+            throw new ProductException("[ FakturomaniaSDK ] productId is required");
 
         try {
             $APIOptions = [
@@ -46,22 +49,40 @@ class Products
                 ],
             ];
             $APIRequest = $this->HTTPClient->request("GET", "invoice-product/get/". $productId, $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            return new ProductModel($APIResponse);
+            $APIResponse = json_decode($APIRequest->getBody()->getContents());
+            return new Product([
+                'id' => $APIResponse->id,
+                'versionId' => $APIResponse->versionId,
+                'versionUUID' => $APIResponse->versionUUID,
+                'created' => $APIResponse->created,
+                'organizationId' => $APIResponse->organizationId,
+                'modified' => $APIResponse->modified,
+                'name' => $APIResponse->name,
+                'classificationCode' => $APIResponse->classificationCode,
+                'unit' => $APIResponse->unit,
+                'quantity' => $APIResponse->quantity,
+                'netPrice' => $APIResponse->netPrice,
+                'netValue' => $APIResponse->netValue,
+                'vatRate' => $APIResponse->vatRate,
+                'grossValue' => $APIResponse->grossValue,
+                'GUT' => $APIResponse->GTU,
+                'isCurrent' => $APIResponse->isCurrent,
+                'deleted' => $APIResponse->deleted
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ProductException($e->getMessage());
         }
     }
 
     /**
-     * @param array $productData
-     * @return ProductModel
-     * @throws Exception
+     * @param Product $product
+     * @return Product
+     * @throws ProductException
      */
-    public function createProduct(array $productData): ProductModel
+    public function createProduct(Product $product): Product
     {
-        if(!isset($productData))
-            throw new Exception("[ FakturomaniaSDK ] productData is required");
+        if(!count($product->toArray()) == 0)
+            throw new ProductException("[ FakturomaniaSDK ] productData is required");
 
         try {
             $APIOptions = [
@@ -70,13 +91,31 @@ class Products
                     "Auth-Token" => $this->authToken,
                     "Content-Type" => "application/json"
                 ],
-                "json" => $productData
+                "json" => $product->getForRequest()
             ];
             $APIRequest = $this->HTTPClient->request("POST", "invoice-product/create", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            return new ProductModel($APIResponse);
+            $APIResponse = json_decode($APIRequest->getBody()->getContents());
+            return new Product([
+                'id' => $APIResponse->id,
+                'versionId' => $APIResponse->versionId,
+                'versionUUID' => $APIResponse->versionUUID,
+                'created' => $APIResponse->created,
+                'organizationId' => $APIResponse->organizationId,
+                'modified' => $APIResponse->modified,
+                'name' => $APIResponse->name,
+                'classificationCode' => $APIResponse->classificationCode,
+                'unit' => $APIResponse->unit,
+                'quantity' => $APIResponse->quantity,
+                'netPrice' => $APIResponse->netPrice,
+                'netValue' => $APIResponse->netValue,
+                'vatRate' => $APIResponse->vatRate,
+                'grossValue' => $APIResponse->grossValue,
+                'GUT' => $APIResponse->GTU,
+                'isCurrent' => $APIResponse->isCurrent,
+                'deleted' => $APIResponse->deleted
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ProductException($e->getMessage());
         }
     }
 
@@ -88,7 +127,7 @@ class Products
     public function deleteProduct(int $productId): bool
     {
         if(!isset($productId))
-            throw new Exception("[ FakturomaniaSDK ] productId is required");
+            throw new ProductException("[ FakturomaniaSDK ] productId is required");
 
         try {
             $APIOptions = [
@@ -105,20 +144,20 @@ class Products
             else
                 return false;
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ProductException($e->getMessage());
         }
     }
 
     /**
      * @param integer $productId
-     * @param $productData
-     * @return ProductModel
-     * @throws Exception
+     * @param Product $product
+     * @return Product
+     * @throws ProductException
      */
-    public function updateProduct(int $productId, $productData): ProductModel
+    public function updateProduct(int $productId, Product $product): Product
     {
-        if(!isset($productData) || !isset($productId))
-            throw new Exception("[ FakturomaniaSDK ] productId and productData is required");
+        if(!count($product->toArray()) == 0 || !isset($productId))
+            throw new ProductException("[ FakturomaniaSDK ] productData and productId is required");
 
         try {
             $APIOptions = [
@@ -127,13 +166,31 @@ class Products
                     "Auth-Token" => $this->authToken,
                     "Content-Type" => "application/json"
                 ],
-                "json" => $productData
+                "json" => $product->getForRequest()
             ];
             $APIRequest = $this->HTTPClient->request("POST", "invoice-product/create", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            return new ProductModel($APIResponse);
+            $APIResponse = json_decode($APIRequest->getBody()->getContents());
+            return new Product([
+                'id' => $APIResponse->id,
+                'versionId' => $APIResponse->versionId,
+                'versionUUID' => $APIResponse->versionUUID,
+                'created' => $APIResponse->created,
+                'organizationId' => $APIResponse->organizationId,
+                'modified' => $APIResponse->modified,
+                'name' => $APIResponse->name,
+                'classificationCode' => $APIResponse->classificationCode,
+                'unit' => $APIResponse->unit,
+                'quantity' => $APIResponse->quantity,
+                'netPrice' => $APIResponse->netPrice,
+                'netValue' => $APIResponse->netValue,
+                'vatRate' => $APIResponse->vatRate,
+                'grossValue' => $APIResponse->grossValue,
+                'GUT' => $APIResponse->GTU,
+                'isCurrent' => $APIResponse->isCurrent,
+                'deleted' => $APIResponse->deleted
+            ]);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ProductException($e->getMessage());
         }
     }
 
@@ -153,7 +210,7 @@ class Products
             $APIRequest = $this->HTTPClient->request("GET", "productsList", $APIOptions);
             return json_decode($APIRequest->getBody()->getContents(), true);
         } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+            throw new ProductException($e->getMessage());
         }
     }
 }

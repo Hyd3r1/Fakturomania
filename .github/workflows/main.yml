@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: PHP - Code and Security
+name: PHP - Security
 
 on:
   push:
@@ -20,8 +20,3 @@ jobs:
         uses: StephaneBour/actions-php-security-checker@1.1
         with:
           composer-lock: './composer.lock'
-          
-      - name: Code Style
-        uses: chindit/actions-phpcs@master
-        with:
-          dir: src/

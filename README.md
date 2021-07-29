@@ -4,11 +4,11 @@
 Generate Auth-Token for another operations
 
 ```php
-    $authData = new \khaller\fakturomania\models\Auth();
+    $authData = new \Fakturomania\Models\Auth();
     $authData->userEmail = "admin@fakturomania.pl";
     $authData->password = "Hasło";
     
-    $authentication = new \khaller\fakturomania\Authentication();
+    $authentication = new \Fakturomania\Authentication();
     $authToken = $authentication->generateSession($authData);
 ```
 Authentication available data
@@ -24,7 +24,7 @@ Authentication available data
 
 Create invoice
 ```php
-    $invoiceData = new \khaller\fakturomania\models\Invoice();
+    $invoiceData = new \Fakturomania\Models\Invoice();
     $invoiceData->documentName = "FV";
     $invoiceData->documentNameIsCustom = false;
     $invoiceData->saleDate = now() * 1000;
@@ -62,13 +62,13 @@ Create invoice
         'vatSplitPaymentMechanismMPP' => false,
     ];
 
-    $sale = new \khaller\fakturomania\Sale($authToken);
+    $sale = new \Fakturomania\Sale($authToken);
     $invoice = $sale->createInvoice($invoiceData);
 ```
 
 Get Invoices
 ```php
-    $sale = new \khaller\fakturomania\Sale($authToken);
+    $sale = new \Fakturomania\Sale($authToken);
     $sale
         ->getInvoices(0000, 1625151106577, "ascending", "issueDate")
         ->each(function ($item){
@@ -78,7 +78,7 @@ Get Invoices
 
 Delete Invoice
 ```php
-    $sale = new \khaller\fakturomania\Sale($authToken);
+    $sale = new \Fakturomania\Sale($authToken);
     $sale->deleteInvoice(637536);
 ```
 
@@ -97,20 +97,20 @@ Invoice available data
 
 Create Contractor
 ```php
-    $contractorData = new \khaller\fakturomania\models\Contractor();
+    $contractorData = new \Fakturomania\Models\Contractor();
     $contractorData->name = "Andrzej Kowalski";
     $contractorData->nipPrefix = "PL";
     $contractorData->street = "ul. gen. Stefana Grota-Rowackiego 38";
     $contractorData->postalCode = "41-214";
     $contractorData->postalCity = "Sosnowiec";
 
-    $contractorClass = new \khaller\fakturomania\Contractor($authToken);
+    $contractorClass = new \Fakturomania\Contractor($authToken);
     $contractor = $contractorClass->createContractor($contractorData);
 ```
 
 Update Contractor
 ```php
-    $contractorData = new \khaller\fakturomania\models\Contractor();
+    $contractorData = new \Fakturomania\Models\Contractor();
     $contractorData->name = "Andrzej Maćkowiak";
     $contractorData->nipPrefix = "PL";
     $contractorData->street = "ul. gen. Stefana Grota-Rowackiego 40";
@@ -144,7 +144,7 @@ Contractor available data
 
 Create product
 ```php
-    $productData = new \khaller\fakturomania\models\Product();
+    $productData = new \Fakturomania\Models\Product();
     $productData->name = "Testowy produkt";
     $productData->classificationCode = "69.20.2";
     $productData->unit = "szt";
@@ -156,13 +156,13 @@ Create product
     $productData->grossValue = 123;
     $productData->GTU = "GTU_12";
     
-    $productClass = new \khaller\fakturomania\Products($authToken);
+    $productClass = new \Fakturomania\Products($authToken);
     $product = $productClass->createProduct($productData);
 ```
 
 Update product
 ```php
-    $productData = new \khaller\fakturomania\models\Product();
+    $productData = new \Fakturomania\Models\Product();
     $productData->name = "Fajny produkt";
     $productData->classificationCode = "69.20.2";
     $productData->unit = "szt";

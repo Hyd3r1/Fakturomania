@@ -21,7 +21,7 @@
     ],
     "autoload": {
         "psr-4": {
-            "khaller\\fakturomania\\": "src/"
+            "Fakturomania\\": "src/"
         }
     },
     "minimum-stability": "stable"

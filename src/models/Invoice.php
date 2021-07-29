@@ -55,4 +55,16 @@ class Invoice extends Model
     {
         array_push($this->records, $record);
     }
+
+    public static function getForResponse($APIResponse)
+    {
+      return new Invoice([
+        'invoiceDetails' => $APIResponse->invoiceDetails,
+        'invoiceInfo' => $APIResponse->invoiceInfo,
+        'contractorInfo' => $APIResponse->contractorInfo,
+        'recordsInfo' => $APIResponse->recordsInfo,
+        'paymentInfo' => $APIResponse->paymentInfo,
+        'taxInfo' => $APIResponse->taxInfo,
+      ]);
+    }
 }

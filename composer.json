@@ -7,7 +7,8 @@
         "guzzlehttp/guzzle": "^6.4",
         "ext-json": "*",
         "jenssegers/model": "^1.4",
-        "easyframework/collections": "^7.0"
+        "easyframework/collections": "^7.0",
+        "vlucas/phpdotenv": "^5.3"
     },
     "license": "MIT",
     "authors": [

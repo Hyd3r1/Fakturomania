@@ -29,4 +29,20 @@ class Contractor extends Model {
             'postalCity' => $this->postalCity
         ];
     }
+
+    public static function getFromResponse($response)
+    {
+      return new Contractor([
+        'contractorId' => $response->contractorId,
+        'contractorVersionId' => $response->contractorVersionId,
+        'name' => $response->name,
+        'nipPrefix' => $response->nipPrefix,
+        'nip' => $response->nip,
+        'street' => $response->street,
+        'postalCode' => $response->postalCode,
+        'postalCity' => $response->postalCity,
+        'customerAccountId' => $response->customerAccountId,
+        'supplierAccountId' => $response->supplierAccountId
+      ]);
+    }
 }

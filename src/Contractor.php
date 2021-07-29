@@ -1,148 +1,108 @@
 <?php
+
 namespace khaller\fakturomania;
 
-
 use Exception;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use khaller\fakturomania\exceptions\ContractorException;
-use khaller\fakturomania\models\ContractorModel;
+use khaller\fakturomania\utils\HTTPClient;
 
 class Contractor
 {
-    /**
-     * @var string $authToken generated with Authentication class
-     */
-    protected $authToken;
+  /**
+   * @var string $authToken generated with Authentication class
+   */
+  protected string $authToken;
 
-    /**
-     * @var Client Guzzle HTTP Agent
-     */
-    private $HTTPClient;
+  /**
+   * Contractor constructor.
+   * @param $authToken
+   * @throws Exception
+   */
+  function __construct($authToken)
+  {
+    if (!isset($authToken))
+      throw new ContractorException("[ FakturomaniaSDK ] authToken is required");
 
-    /**
-     * Contractor constructor.
-     * @param $authToken
-     * @throws Exception
-     */
-    function __construct($authToken)
-    {
-        if(!isset($authToken))
-            throw new Exception("[ FakturomaniaSDK ] authToken is required");
+    $this->authToken = $authToken;
+  }
 
-        $this->authToken = $authToken;
-        $this->HTTPClient = new Client(["base_uri" => "https://app.fakturomania.pl/api/v1/"]);
+  /**
+   * @param integer $contractorId
+   * @return models\Contractor
+   * @throws Exception
+   */
+  public function getContractor(int $contractorId): models\Contractor
+  {
+    if (!isset($contractorId))
+      throw new ContractorException("[ FakturomaniaSDK ] contractorId is required");
+
+    try {
+      return models\Contractor::getFromResponse(
+        json_decode(
+          (new HTTPClient())
+            ->request("GET", "contractors/" . $contractorId, $this->authToken)
+            ->getBody()
+            ->getContents()
+        )
+      );
+    } catch (GuzzleException $e) {
+      throw new ContractorException($e->getMessage());
     }
+  }
 
-    /**
-     * @param integer $contractorId
-     * @return models\Contractor
-     * @throws Exception
-     */
-    public function getContractor(int $contractorId): models\Contractor
-    {
-        if(!isset($contractorId))
-            throw new Exception("[ FakturomaniaSDK ] contractorId is required");
+  /**
+   * @param $contractorId
+   * @param models\Contractor $contractor
+   * @return models\Contractor
+   * @throws ContractorException
+   */
+  public function updateContractor($contractorId, models\Contractor $contractor): models\Contractor
+  {
+    if (!$contractor || isset($contractorId))
+      throw new ContractorException("[ FakturowaniaSDK ] contractorId and contractor is required");
 
-        try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Content-Type" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ]
-            ];
-            $APIRequest = $this->HTTPClient->request("GET", "contractors/". $contractorId, $APIOptions);
-            $apiResponse = json_decode($APIRequest->getBody()->getContents());
-            return new models\Contractor([
-                'contractorId' => $apiResponse->contractorId,
-                'contractorVersionId' => $apiResponse->contractorVersionId,
-                'name' => $apiResponse->name,
-                'nipPrefix' => $apiResponse->nipPrefix,
-                'nip' => $apiResponse->nip,
-                'street' => $apiResponse->street,
-                'postalCode' => $apiResponse->postalCode,
-                'postalCity' => $apiResponse->postalCity,
-                'customerAccountId' => $apiResponse->customerAccountId,
-                'supplierAccountId' => $apiResponse->supplierAccountId
-            ]);
-        } catch (GuzzleException $e) {
-            throw new ContractorException($e->getMessage());
-        }
+    try {
+      $APIOptions = [
+        "json" => $contractor->getForRequest()
+      ];
+      return models\Contractor::getFromResponse(
+        json_decode(
+          (new HTTPClient())
+            ->request("PUT", "contractors/" . $contractorId, $this->authToken, $APIOptions)
+            ->getBody()
+            ->getContents()
+        )
+      );
+    } catch (GuzzleException $e) {
+      throw new ContractorException($e->getMessage());
     }
+  }
 
-    /**
-     * @return models\Contractor
-     * @throws Exception
-     */
-    public function updateContractor($contractorId, models\Contractor $contractor): models\Contractor
-    {
-        if(!$contractor || isset($contractorId))
-            throw new ContractorException("[ FakturowaniaSDK ] contractorId and contractor is required");
+  /**
+   * @param models\Contractor $contractor
+   * @return models\Contractor
+   * @throws ContractorException
+   */
+  public function createContractor(models\Contractor $contractor): models\Contractor
+  {
+    if (count($contractor->toArray()) === 0)
+      throw new ContractorException("[ FakturowaniaSDK ] contractor is required");
 
-        try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Content-Type" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ],
-                "json" => $contractor->getForRequest()
-            ];
-            $APIRequest = $this->HTTPClient->request("PUT", "contractors/". $contractorId, $APIOptions);
-            $apiResponse = json_decode($APIRequest->getBody()->getContents());
-            return new models\Contractor([
-                'contractorId' => $apiResponse->contractorId,
-                'contractorVersionId' => $apiResponse->contractorVersionId,
-                'name' => $apiResponse->name,
-                'nipPrefix' => $apiResponse->nipPrefix,
-                'nip' => $apiResponse->nip,
-                'street' => $apiResponse->street,
-                'postalCode' => $apiResponse->postalCode,
-                'postalCity' => $apiResponse->postalCity,
-                'customerAccountId' => $apiResponse->customerAccountId,
-                'supplierAccountId' => $apiResponse->supplierAccountId
-            ]);
-        } catch (GuzzleException $e) {
-            throw new ContractorException($e->getMessage());
-        }
+    try {
+      $APIOptions = [
+        "json" => $contractor->getForRequest()
+      ];
+      return models\Contractor::getFromResponse(
+        json_decode(
+          (new HTTPClient())
+            ->request("POST", "contractors", $this->authToken, $APIOptions)
+            ->getBody()
+            ->getContents()
+        )
+      );
+    } catch (GuzzleException $e) {
+      throw new ContractorException($e->getMessage());
     }
-
-    /**
-     * @param models\Contractor $contractor
-     * @return models\Contractor
-     * @throws ContractorException
-     */
-    public function createContractor(models\Contractor $contractor): models\Contractor
-    {
-        if(count($contractor->toArray()) === 0)
-            throw new ContractorException("[ FakturowaniaSDK ] contractor is required");
-
-        try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Content-Type" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ],
-                "json" => $contractor->getForRequest()
-            ];
-            $APIRequest = $this->HTTPClient->request("POST", "contractors", $APIOptions);
-            $apiResponse = json_decode($APIRequest->getBody()->getContents());
-            return new models\Contractor([
-                'contractorId' => $apiResponse->contractorId,
-                'contractorVersionId' => $apiResponse->contractorVersionId,
-                'name' => $apiResponse->name,
-                'nipPrefix' => $apiResponse->nipPrefix,
-                'nip' => $apiResponse->nip,
-                'street' => $apiResponse->street,
-                'postalCode' => $apiResponse->postalCode,
-                'postalCity' => $apiResponse->postalCity,
-                'customerAccountId' => $apiResponse->customerAccountId,
-                'supplierAccountId' => $apiResponse->supplierAccountId
-            ]);
-        } catch (GuzzleException $e) {
-            throw new ContractorException($e->getMessage());
-        }
-    }
+  }
 }

@@ -39,4 +39,27 @@ class Product extends Model {
             'GTU' => $this->GTU
         ];
     }
+
+    public static function getForResponse($APIResponse)
+    {
+      return new Product([
+        'id' => $APIResponse->id,
+        'versionId' => $APIResponse->versionId,
+        'versionUUID' => $APIResponse->versionUUID,
+        'created' => $APIResponse->created,
+        'organizationId' => $APIResponse->organizationId,
+        'modified' => $APIResponse->modified,
+        'name' => $APIResponse->name,
+        'classificationCode' => $APIResponse->classificationCode,
+        'unit' => $APIResponse->unit,
+        'quantity' => $APIResponse->quantity,
+        'netPrice' => $APIResponse->netPrice,
+        'netValue' => $APIResponse->netValue,
+        'vatRate' => $APIResponse->vatRate,
+        'grossValue' => $APIResponse->grossValue,
+        'GUT' => $APIResponse->GTU,
+        'isCurrent' => $APIResponse->isCurrent,
+        'deleted' => $APIResponse->deleted
+      ]);
+    }
 }

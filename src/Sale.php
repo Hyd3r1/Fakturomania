@@ -3,19 +3,13 @@ namespace khaller\fakturomania;
 
 use Collections\Vector;
 use Exception;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use khaller\fakturomania\exceptions\InvoiceException;
 use khaller\fakturomania\models\Invoice;
-use khaller\fakturomania\models\SaleModel;
+use khaller\fakturomania\utils\HTTPClient;
 
 class Sale
 {
-    /**
-     * @var $HTTPClient
-     */
-    private $HTTPClient;
-
     /**
      * @var $authToken
      */
@@ -26,7 +20,6 @@ class Sale
      */
     function __construct($authToken)
     {
-        $this->HTTPClient = new Client(["base_uri" => "https://app.fakturomania.pl/api/v1/"]);
         $this->authToken = $authToken;
     }
 
@@ -41,24 +34,15 @@ class Sale
             throw new InvoiceException("[ Fakturomania SDK ] InvoiceData is required");
 
         try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                    "Content-Type" => "application/json"
-                ],
-                "json" => $invoice->getForRequest()
-            ];
-            $APIRequest = $this->HTTPClient->request("POST", "sale", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents());
-            return new Invoice([
-                'invoiceDetails' => $APIResponse->invoiceDetails,
-                'invoiceInfo' => $APIResponse->invoiceInfo,
-                'contractorInfo' => $APIResponse->contractorInfo,
-                'recordsInfo' => $APIResponse->recordsInfo,
-                'paymentInfo' => $APIResponse->paymentInfo,
-                'taxInfo' => $APIResponse->taxInfo,
-            ]);
+            $APIOptions = ["json" => $invoice->getForRequest()];
+            return Invoice::getForResponse(
+              json_decode(
+                (new HTTPClient())
+                  ->request("POST", "sale", $this->authToken, $APIOptions)
+                  ->getBody()
+                  ->getContents()
+              )
+            );
         } catch (GuzzleException $e) {
             throw new InvoiceException($e->getMessage());
         }
@@ -76,10 +60,6 @@ class Sale
         try {
             $coll = new Vector();
             $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ],
                 "query" => [
                     "fromMoment" => $from,
                     "toMoment" => $to,
@@ -87,11 +67,15 @@ class Sale
                     "sortParameter" => $sortPar
                 ]
             ];
-            $APIRequest = $this->HTTPClient->request("GET", "sale", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents(), true);
-            foreach ($APIResponse["data"] as $invoice)
+            $APIResponse = json_decode(
+              (new HTTPClient())
+                ->request("GET", "sale", $this->authToken, $APIOptions)
+                ->getBody()
+                ->getContents()
+            );
+            foreach ($APIResponse->data as $invoice)
             {
-                $coll->add(new SaleModel($invoice));
+                $coll->add(Invoice::getForResponse($invoice));
             }
             return $coll;
         } catch (GuzzleException $e) {
@@ -110,13 +94,8 @@ class Sale
             throw new Exception("[ Fakturomania SDK ] invoiceId is required");
 
         try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ]
-            ];
-            $APIRequest = $this->HTTPClient->request("GET", "sale/". $invoiceId, $APIOptions);
+            $APIRequest = (new HTTPClient())
+              ->request("GET", "sale/". $invoiceId, $this->authToken);
             return $APIRequest->getStatusCode() == 200;
         } catch (GuzzleException $e) {
             throw new Exception($e->getMessage());

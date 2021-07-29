@@ -1,33 +1,24 @@
 <?php
 namespace khaller\fakturomania;
 
-use Collections\Vector;
 use Exception;
-use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use Jenssegers\Model\Model;
 use khaller\fakturomania\exceptions\ProductException;
 use khaller\fakturomania\models\Product;
-use khaller\fakturomania\models\ProductModel;
+use khaller\fakturomania\utils\HTTPClient;
 
 class Products
 {
     /**
-     * @var null|Client HTTP Connection
-     */
-    private $HTTPClient = null;
-
-    /**
      * @var string Auth token
      */
-    private $authToken;
+    private string $authToken;
 
     /**
      * Products constructor.
      */
     function __construct($authToken)
     {
-        $this->HTTPClient = new Client(["base_uri" => "https://app.fakturomania.pl/api/v1/"]);
         $this->authToken = $authToken;
     }
 
@@ -42,33 +33,14 @@ class Products
             throw new ProductException("[ FakturomaniaSDK ] productId is required");
 
         try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ],
-            ];
-            $APIRequest = $this->HTTPClient->request("GET", "invoice-product/get/". $productId, $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents());
-            return new Product([
-                'id' => $APIResponse->id,
-                'versionId' => $APIResponse->versionId,
-                'versionUUID' => $APIResponse->versionUUID,
-                'created' => $APIResponse->created,
-                'organizationId' => $APIResponse->organizationId,
-                'modified' => $APIResponse->modified,
-                'name' => $APIResponse->name,
-                'classificationCode' => $APIResponse->classificationCode,
-                'unit' => $APIResponse->unit,
-                'quantity' => $APIResponse->quantity,
-                'netPrice' => $APIResponse->netPrice,
-                'netValue' => $APIResponse->netValue,
-                'vatRate' => $APIResponse->vatRate,
-                'grossValue' => $APIResponse->grossValue,
-                'GUT' => $APIResponse->GTU,
-                'isCurrent' => $APIResponse->isCurrent,
-                'deleted' => $APIResponse->deleted
-            ]);
+            return Product::getForResponse(
+              json_decode(
+                (new HTTPClient())
+                  ->request("GET", "invoice-product/get/". $productId, $this->authToken)
+                  ->getBody()
+                  ->getContents()
+              )
+            );
         } catch (GuzzleException $e) {
             throw new ProductException($e->getMessage());
         }
@@ -85,35 +57,15 @@ class Products
             throw new ProductException("[ FakturomaniaSDK ] productData is required");
 
         try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                    "Content-Type" => "application/json"
-                ],
-                "json" => $product->getForRequest()
-            ];
-            $APIRequest = $this->HTTPClient->request("POST", "invoice-product/create", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents());
-            return new Product([
-                'id' => $APIResponse->id,
-                'versionId' => $APIResponse->versionId,
-                'versionUUID' => $APIResponse->versionUUID,
-                'created' => $APIResponse->created,
-                'organizationId' => $APIResponse->organizationId,
-                'modified' => $APIResponse->modified,
-                'name' => $APIResponse->name,
-                'classificationCode' => $APIResponse->classificationCode,
-                'unit' => $APIResponse->unit,
-                'quantity' => $APIResponse->quantity,
-                'netPrice' => $APIResponse->netPrice,
-                'netValue' => $APIResponse->netValue,
-                'vatRate' => $APIResponse->vatRate,
-                'grossValue' => $APIResponse->grossValue,
-                'GUT' => $APIResponse->GTU,
-                'isCurrent' => $APIResponse->isCurrent,
-                'deleted' => $APIResponse->deleted
-            ]);
+            $APIOptions = ["json" => $product->getForRequest()];
+            return Product::getForResponse(
+              json_decode(
+                (new HTTPClient())
+                  ->request("POST", "invoice-product/create", $this->authToken, $APIOptions)
+                  ->getBody()
+                  ->getContents()
+              )
+            );
         } catch (GuzzleException $e) {
             throw new ProductException($e->getMessage());
         }
@@ -130,19 +82,10 @@ class Products
             throw new ProductException("[ FakturomaniaSDK ] productId is required");
 
         try {
-            $APIOptions = [
-                "headers" => [
-                    "headers" => [
-                        "Accept" => "application/json",
-                        "Auth-Token" => $this->authToken,
-                    ],
-                ]
-            ];
-            $APIRequest = $this->HTTPClient->request("DELETE", "invoice-product/delete/". $productId, $APIOptions);
-            if($APIRequest->getStatusCode() == 200)
-                return true;
-            else
-                return false;
+            $APIRequest = (new HTTPClient())
+                            ->request("DELETE", "invoice-product/delete/". $productId, $this->authToken);
+
+            return $APIRequest->getStatusCode() === 200;
         } catch (GuzzleException $e) {
             throw new ProductException($e->getMessage());
         }
@@ -160,35 +103,15 @@ class Products
             throw new ProductException("[ FakturomaniaSDK ] productData and productId is required");
 
         try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                    "Content-Type" => "application/json"
-                ],
-                "json" => $product->getForRequest()
-            ];
-            $APIRequest = $this->HTTPClient->request("POST", "invoice-product/create", $APIOptions);
-            $APIResponse = json_decode($APIRequest->getBody()->getContents());
-            return new Product([
-                'id' => $APIResponse->id,
-                'versionId' => $APIResponse->versionId,
-                'versionUUID' => $APIResponse->versionUUID,
-                'created' => $APIResponse->created,
-                'organizationId' => $APIResponse->organizationId,
-                'modified' => $APIResponse->modified,
-                'name' => $APIResponse->name,
-                'classificationCode' => $APIResponse->classificationCode,
-                'unit' => $APIResponse->unit,
-                'quantity' => $APIResponse->quantity,
-                'netPrice' => $APIResponse->netPrice,
-                'netValue' => $APIResponse->netValue,
-                'vatRate' => $APIResponse->vatRate,
-                'grossValue' => $APIResponse->grossValue,
-                'GUT' => $APIResponse->GTU,
-                'isCurrent' => $APIResponse->isCurrent,
-                'deleted' => $APIResponse->deleted
-            ]);
+            $APIOptions = ["json" => $product->getForRequest()];
+            return Product::getForResponse(
+              json_decode(
+                (new HTTPClient())
+                  ->request("POST", "invoice-product/update/". $productId, $this->authToken, $APIOptions)
+                  ->getBody()
+                  ->getContents()
+              )
+            );
         } catch (GuzzleException $e) {
             throw new ProductException($e->getMessage());
         }
@@ -201,14 +124,13 @@ class Products
     public function getProductsList()
     {
         try {
-            $APIOptions = [
-                "headers" => [
-                    "Accept" => "application/json",
-                    "Auth-Token" => $this->authToken,
-                ],
-            ];
-            $APIRequest = $this->HTTPClient->request("GET", "productsList", $APIOptions);
-            return json_decode($APIRequest->getBody()->getContents(), true);
+            return json_decode(
+              (new HTTPClient())
+                ->request("GET", "productsList", $this->authToken)
+                ->getBody()
+                ->getContents(),
+              true
+            );
         } catch (GuzzleException $e) {
             throw new ProductException($e->getMessage());
         }

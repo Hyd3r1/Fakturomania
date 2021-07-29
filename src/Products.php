@@ -41,8 +41,8 @@ class Products
                   ->getContents()
               )
             );
-        } catch (GuzzleException $e) {
-            throw new ProductException($e->getMessage());
+        } catch (ProductException $e) {
+            return $e;
         }
     }
 
@@ -66,8 +66,8 @@ class Products
                   ->getContents()
               )
             );
-        } catch (GuzzleException $e) {
-            throw new ProductException($e->getMessage());
+        } catch (ProductException $e) {
+            return $e;
         }
     }
 
@@ -86,8 +86,8 @@ class Products
                             ->request("DELETE", "invoice-product/delete/". $productId, $this->authToken);
 
             return $APIRequest->getStatusCode() === 200;
-        } catch (GuzzleException $e) {
-            throw new ProductException($e->getMessage());
+        } catch (ProductException $e) {
+            return $e;
         }
     }
 
@@ -112,8 +112,8 @@ class Products
                   ->getContents()
               )
             );
-        } catch (GuzzleException $e) {
-            throw new ProductException($e->getMessage());
+        } catch (ProductException $e) {
+            return $e;
         }
     }
 
@@ -131,8 +131,8 @@ class Products
                 ->getContents(),
               true
             );
-        } catch (GuzzleException $e) {
-            throw new ProductException($e->getMessage());
+        } catch (ProductException $e) {
+            return $e;
         }
     }
 }

@@ -43,8 +43,8 @@ class Sale
                   ->getContents()
               )
             );
-        } catch (GuzzleException $e) {
-            throw new InvoiceException($e->getMessage());
+        } catch (InvoiceException $e) {
+            return $e;
         }
     }
 
@@ -78,8 +78,8 @@ class Sale
                 $coll->add(Invoice::getForResponse($invoice));
             }
             return $coll;
-        } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+        } catch (InvoiceException $e) {
+            return $e;
         }
     }
 
@@ -97,8 +97,8 @@ class Sale
             $APIRequest = (new HTTPClient())
               ->request("GET", "sale/". $invoiceId, $this->authToken);
             return $APIRequest->getStatusCode() == 200;
-        } catch (GuzzleException $e) {
-            throw new Exception($e->getMessage());
+        } catch (InvoiceException $e) {
+            return $e;
         }
     }
 }

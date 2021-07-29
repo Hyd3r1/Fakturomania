@@ -46,8 +46,8 @@ class Contractor
             ->getContents()
         )
       );
-    } catch (GuzzleException $e) {
-      throw new ContractorException($e->getMessage());
+    } catch (ContractorException $e) {
+      return $e;
     }
   }
 
@@ -74,8 +74,8 @@ class Contractor
             ->getContents()
         )
       );
-    } catch (GuzzleException $e) {
-      throw new ContractorException($e->getMessage());
+    } catch (ContractorException $e) {
+      return $e;
     }
   }
 
@@ -101,8 +101,8 @@ class Contractor
             ->getContents()
         )
       );
-    } catch (GuzzleException $e) {
-      throw new ContractorException($e->getMessage());
+    } catch (ContractorException $e) {
+      return $e;
     }
   }
 }

@@ -35,8 +35,8 @@ class Authentication
                 'userLoginEmail' => $APIResponse->userLoginEmail,
                 'valid' => $APIResponse->valid
             ]);
-        } catch (GuzzleException $e) {
-            throw new AuthenticationException($e);
+        } catch (AuthenticationException $e) {
+            return $e;
         }
     }
 }

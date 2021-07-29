@@ -1,5 +1,5 @@
 <?php
-namespace khaller\fakturomania\models;
+namespace Fakturomania\Models;
 
 
 use Jenssegers\Model\Model;

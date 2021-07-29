@@ -1,11 +1,9 @@
 <?php
 
-namespace khaller\fakturomania;
+namespace Fakturomania;
 
-use Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturomania\exceptions\ContractorException;
-use khaller\fakturomania\utils\HTTPClient;
+use Fakturomania\Exceptions\ContractorException;
+use Fakturomania\Utils\HTTPClient;
 
 class Contractor
 {

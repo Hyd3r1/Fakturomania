@@ -1,11 +1,9 @@
 <?php
-namespace khaller\fakturomania;
+namespace Fakturomania;
 
-use Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturomania\exceptions\AuthenticationException;
-use khaller\fakturomania\models\Auth;
-use khaller\fakturomania\utils\HTTPClient;
+use Fakturomania\Exceptions\AuthenticationException;
+use Fakturomania\Models\Auth;
+use Fakturomania\Utils\HTTPClient;
 
 class Authentication
 {

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace khaller\fakturomania\exceptions;
+namespace Fakturomania\Exceptions;
 
 
 class ProductException extends \Exception

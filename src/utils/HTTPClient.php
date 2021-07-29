@@ -1,5 +1,5 @@
 <?php
-namespace khaller\fakturomania\utils;
+namespace Fakturomania\Utils;
 use GuzzleHttp\Client;
 use Psr\Http\Message\ResponseInterface;
 

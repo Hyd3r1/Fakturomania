@@ -1,11 +1,9 @@
 <?php
-namespace khaller\fakturomania;
+namespace Fakturomania;
 
-use Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturomania\exceptions\ProductException;
-use khaller\fakturomania\models\Product;
-use khaller\fakturomania\utils\HTTPClient;
+use Fakturomania\Exceptions\ProductException;
+use Fakturomania\Models\Product;
+use Fakturomania\Utils\HTTPClient;
 
 class Products
 {

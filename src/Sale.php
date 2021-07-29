@@ -2,11 +2,9 @@
 namespace khaller\fakturomania;
 
 use Collections\Vector;
-use Exception;
-use GuzzleHttp\Exception\GuzzleException;
-use khaller\fakturomania\exceptions\InvoiceException;
-use khaller\fakturomania\models\Invoice;
-use khaller\fakturomania\utils\HTTPClient;
+use Fakturomania\Exceptions\InvoiceException;
+use Fakturomania\Models\Invoice;
+use Fakturomania\Utils\HTTPClient;
 
 class Sale
 {
@@ -55,7 +53,7 @@ class Sale
     public function getInvoices($from, $to, $sortDir, $sortPar): Vector
     {
         if(!isset($from) || !isset($to) || !isset($sortDir) || !isset($sortPar))
-            throw new Exception("[ Fakturomania SDK ] InvoiceData is required");
+            throw new InvoiceException("[ Fakturomania SDK ] InvoiceData is required");
 
         try {
             $coll = new Vector();
@@ -91,7 +89,7 @@ class Sale
     public function deleteInvoice(int $invoiceId): bool
     {
         if(!isset($invoiceId))
-            throw new Exception("[ Fakturomania SDK ] invoiceId is required");
+            throw new InvoiceException("[ Fakturomania SDK ] invoiceId is required");
 
         try {
             $APIRequest = (new HTTPClient())

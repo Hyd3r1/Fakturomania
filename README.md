@@ -1,3 +1,6 @@
+## Fakturomania (Swagger)
+https://api.fakturomania.pl/
+
 ## Authentication
 <hr />
 

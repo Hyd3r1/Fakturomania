@@ -187,7 +187,7 @@ Delete product
 ```
 
 
-Contractor available data
+Product available data
 ```yaml
     $product->id - Product id
     $product->versionId - Product version id

@@ -1,0 +1,29 @@
+name: "CodeQL"
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  codeql:
+    name: CodeQL Analyze
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ php ]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@main
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@main
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@main

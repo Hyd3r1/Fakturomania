@@ -57,7 +57,7 @@ class Product extends Model {
         'netValue' => $APIResponse->netValue,
         'vatRate' => $APIResponse->vatRate,
         'grossValue' => $APIResponse->grossValue,
-        'GUT' => $APIResponse->GTU,
+        'GTU' => $APIResponse->GTU,
         'isCurrent' => $APIResponse->isCurrent,
         'deleted' => $APIResponse->deleted
       ]);

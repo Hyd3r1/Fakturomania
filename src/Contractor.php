@@ -57,7 +57,7 @@ class Contractor
    */
   public function updateContractor($contractorId, models\Contractor $contractor): models\Contractor
   {
-    if (!$contractor || isset($contractorId))
+    if (!$contractor || !isset($contractorId))
       throw new ContractorException("[ FakturowaniaSDK ] contractorId and contractor is required");
 
     try {

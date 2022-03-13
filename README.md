@@ -1,6 +1,12 @@
 ## Fakturomania (Swagger)
 https://api.fakturomania.pl/
 
+## Install
+```
+composer require khaller/fakturomania-sdk
+```
+Packagist - https://packagist.org/packages/khaller/fakturomania-sdk
+
 ## Authentication
 <hr />
 
